@@ -3,13 +3,15 @@ import { nanoid } from 'nanoid';
 
 export const FormContext = createContext();
 
+
 export function FormProvider({ children }) {
   const [fields, setFields] = useState(() => {
     const saved = localStorage.getItem('formFields');
     return saved ? JSON.parse(saved) : [];
   });
   const [selectedFieldId, setSelectedFieldId] = useState(null);
-
+  const [currentStep, setCurrentStep] = useState(0); 
+  
   useEffect(() => {
     localStorage.setItem('formFields', JSON.stringify(fields));
   }, [fields]);
@@ -127,6 +129,8 @@ export function FormProvider({ children }) {
         updateFieldValue,
         validateFieldValue,
         resetForm, // 👉 Also exposed in the context value
+        currentStep, // ⬅️ NEW
+        setCurrentStep // ⬅️ NEW
       }}
     >
       {children}

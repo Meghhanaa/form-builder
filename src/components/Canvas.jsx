@@ -38,7 +38,7 @@ export default function Canvas() {
 
   return (
     <main
-      className="w-3/4 p-6 min-h-screen bg-white dark:bg-gray-900 dark:text-white overflow-auto"
+      className="w p-6 min-h-screen bg-white dark:bg-gray-900 dark:text-white overflow-auto"
       onDragOver={onDragOver}
       onDrop={(e) => onDrop(e)}
     >

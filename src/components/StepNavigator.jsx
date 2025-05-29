@@ -1,38 +1,55 @@
-// src/components/StepNavigator.jsx
 import React, { useContext } from 'react';
 import { FormContext } from '../context/FormContext';
 
 const StepNavigator = () => {
   const {
-    currentStep,
-    setCurrentStep,
     fields,
     validateFieldValue,
+    currentStep,
+    setCurrentStep
   } = useContext(FormContext);
 
-  const totalSteps = Math.max(...fields.map((f) => f.step || 1), 1);
+  const stepFields = fields.filter((f) => f.step === undefined || f.step === currentStep);
+
+  const isLastStep = fields.some((f) => f.step !== undefined)
+    ? !fields.some((f) => f.step > currentStep)
+    : true;
 
   const handleNext = () => {
-    const stepFields = fields.filter((f) => f.step === currentStep);
-    const errors = stepFields.flatMap(validateFieldValue);
-    if (errors.length > 0) {
-      alert(errors.join('\n'));
+    const allValid = stepFields.every((field) => {
+      const errors = validateFieldValue(field);
+      return errors.length === 0;
+    });
+
+    if (!allValid) {
+      alert('Please fix validation errors before continuing.');
       return;
     }
-    setCurrentStep(Math.min(currentStep + 1, totalSteps));
+
+    setCurrentStep((prev) => prev + 1);
   };
 
   const handleBack = () => {
-    setCurrentStep(Math.max(currentStep - 1, 1));
+    if (currentStep > 0) {
+      setCurrentStep((prev) => prev - 1);
+    }
   };
 
   return (
-    <div className="flex justify-between mt-4">
-      <button onClick={handleBack} disabled={currentStep === 1}>
+    <div className="flex justify-between mt-6">
+      <button
+        onClick={handleBack}
+        disabled={currentStep === 0}
+        className="px-6 py-2 text-sm font-medium rounded-lg bg-gray-300 hover:bg-gray-400 text-gray-800 disabled:opacity-50"
+      >
         Back
       </button>
-      <button onClick={handleNext} disabled={currentStep === totalSteps}>
-        Next
+
+      <button
+        onClick={handleNext}
+        className="px-6 py-2 text-sm font-medium rounded-lg bg-blue-600 hover:bg-blue-700 text-white"
+      >
+        {isLastStep ? 'Finish' : 'Next'}
       </button>
     </div>
   );

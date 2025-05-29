@@ -2,7 +2,7 @@ import React from 'react';
 
 const modes = [
   { label: 'Desktop', width: '100%' },
-  { label: 'Tablet', width: '768px' },
+  { label: 'Tablet', width: '608px' },
   { label: 'Mobile', width: '375px' },
 ];
 
