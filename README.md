@@ -1,4 +1,5 @@
 🧩 React Form Builder
+
 A powerful and interactive Form Builder built with React + Vite, Tailwind CSS, and Context API, supporting drag-and-drop form creation, multi-step functionality, real-time preview, theming, and localStorage-based persistence.
 
 🔗 Live Demo
@@ -71,13 +72,12 @@ Form Persistence: localStorage
 
 🧑‍💻 Getting Started
 🔧 Installation
-bash
-Copy
-Edit
-git clone https://github.com/yourusername/form-builder.git
+
+git clone (https://github.com/Meghhanaa/form-builder)
 cd form-builder
 npm install
 npm run dev
+
 🧪 Test Locally
 Build a form in the builder.
 
