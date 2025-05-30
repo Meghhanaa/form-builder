@@ -75,10 +75,10 @@ export default function FieldRenderer({ field }) {
         <input
           type="date"
           className={`w-full p-2 border rounded ${
-            errors.length ? 'border-red-500' : 'border-gray-300'
+            Array.isArray(errors) && errors.length ? 'border-red-500' : 'border-gray-300'
           }`}
-          value={field.value}
-          onChange={onChange}
+          value={field.value || ''}
+          onChange={(e) => updateFieldValue(field.id, e.target.value)}
         />
       )}
 

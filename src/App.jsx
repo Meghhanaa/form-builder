@@ -5,7 +5,7 @@ import FieldEditor from './components/FieldEditor';
 import { FormProvider } from './context/FormContext';
 import StepNavigator from './components/StepNavigator';
 import ProgressIndicator from './components/ProgressIndicator';
-import PreviewToggle from './components/PreviewToggle';
+// import PreviewToggle from './components/PreviewToggle';
 import ThemeToggle from './components/ThemeToggle';
 
 export default function App() {

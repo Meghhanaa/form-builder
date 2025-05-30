@@ -78,7 +78,7 @@ export default function FormFiller() {
                 {field.required && <span className="text-red-500"> *</span>}
               </label>
 
-              {field.type === 'text' || field.type === 'email' || field.type === 'number' ? (
+              {field.type === 'text' || field.type === 'email' || field.type === 'date'|| field.type === 'number' ? (
                 <input
                   type={field.type}
                   placeholder={field.placeholder}
