@@ -45,7 +45,7 @@ export default function FieldRenderer({ field }) {
 
       {field.type === 'dropdown' && (
         <select
-          className={`w-full p-2 border rounded ${
+          className={`w-full p-2 border rounded text-black ${
             errors.length ? 'border-red-500' : 'border-gray-300'
           }`}
           value={field.value}

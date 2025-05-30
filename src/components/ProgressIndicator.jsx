@@ -1,11 +1,8 @@
 // src/components/ProgressIndicator.jsx
-import React, { useContext } from 'react';
-import { FormContext } from '../context/FormContext';
+import React from 'react';
 
-const ProgressIndicator = () => {
-  const { currentStep, fields } = useContext(FormContext);
-  const totalSteps = Math.max(...fields.map((f) => f.step || 1), 1);
-  const progress = (currentStep / totalSteps) * 100;
+const ProgressIndicator = ({ currentStep, totalSteps }) => {
+  const progress = totalSteps > 0 ? (currentStep / totalSteps) * 100 : 0;
 
   return (
     <div className="w-full bg-gray-300 h-2 rounded-full mb-4">

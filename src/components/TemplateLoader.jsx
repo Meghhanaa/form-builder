@@ -1,4 +1,3 @@
-// src/components/TemplateLoader.jsx
 import React, { useContext, useState } from 'react';
 import { FormContext } from '../context/FormContext';
 
@@ -55,29 +54,53 @@ const predefinedTemplates = {
 };
 
 export default function TemplateLoader() {
-  const { loadTemplateFromLocal, saveTemplateToLocal } = useContext(FormContext);
+  const {
+    saveTemplateToLocal,
+    loadTemplateFromLocal,
+  } = useContext(FormContext);
+
   const [templateName, setTemplateName] = useState('');
   const [selectedPredefined, setSelectedPredefined] = useState('');
+  const [selectedSavedTemplate, setSelectedSavedTemplate] = useState('');
+  const [savedTemplates, setSavedTemplates] = useState(() => {
+    // Load all saved template keys from localStorage on mount
+    return Object.keys(localStorage)
+      .filter((key) => key.startsWith('formTemplate-'))
+      .map((key) => key.replace('formTemplate-', ''));
+  });
 
+  // Save current form as named template
   const handleSaveTemplate = () => {
-    if (templateName.trim()) {
-      saveTemplateToLocal(templateName.trim());
-      alert(`Template '${templateName}' saved locally!`);
-      setTemplateName('');
+    if (!templateName.trim()) {
+      alert('Please enter a valid template name');
+      return;
     }
+    saveTemplateToLocal(templateName.trim());
+    alert(`Template '${templateName.trim()}' saved locally!`);
+    setTemplateName('');
+    setSavedTemplates((prev) => [...prev, templateName.trim()]);
   };
 
+  // Load predefined template from memory
   const handleLoadPredefined = () => {
     if (selectedPredefined && predefinedTemplates[selectedPredefined]) {
       loadTemplateFromLocal('', predefinedTemplates[selectedPredefined]);
     }
   };
 
-  return (
-    <div className="p-4 bg-white rounded shadow w-full">
-      <h3 className="text-lg font-semibold mb-2">📁 Template Loader</h3>
+  // Load saved template from localStorage
+  const handleLoadSavedTemplate = () => {
+    if (selectedSavedTemplate) {
+      loadTemplateFromLocal(selectedSavedTemplate);
+    }
+  };
 
-      <div className="mb-4">
+  return (
+    <div className="p-4 bg-white rounded shadow w-full max-w-md">
+      <h3 className="text-lg font-semibold mb-4">📁 Template Loader</h3>
+
+      {/* Save current form as template */}
+      <div className="mb-6">
         <label className="block mb-1 font-medium">Save Current Form as Template:</label>
         <input
           type="text"
@@ -94,7 +117,8 @@ export default function TemplateLoader() {
         </button>
       </div>
 
-      <div>
+      {/* Load predefined template */}
+      <div className="mb-6">
         <label className="block mb-1 font-medium">Load Predefined Template:</label>
         <select
           className="border px-2 py-1 w-full rounded"
@@ -113,6 +137,29 @@ export default function TemplateLoader() {
           onClick={handleLoadPredefined}
         >
           Load Template
+        </button>
+      </div>
+
+      {/* Load saved template */}
+      <div>
+        <label className="block mb-1 font-medium">Load Saved Template:</label>
+        <select
+          className="border px-2 py-1 w-full rounded"
+          onChange={(e) => setSelectedSavedTemplate(e.target.value)}
+          value={selectedSavedTemplate}
+        >
+          <option value="">Select saved template</option>
+          {savedTemplates.map((name) => (
+            <option key={name} value={name}>
+              {name}
+            </option>
+          ))}
+        </select>
+        <button
+          className="mt-2 px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+          onClick={handleLoadSavedTemplate}
+        >
+          Load Saved Template
         </button>
       </div>
     </div>

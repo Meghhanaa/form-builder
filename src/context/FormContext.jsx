@@ -3,7 +3,6 @@ import { nanoid } from 'nanoid';
 
 export const FormContext = createContext();
 
-
 export function FormProvider({ children }) {
   const [fields, setFields] = useState(() => {
     const saved = localStorage.getItem('formFields');
@@ -11,10 +10,42 @@ export function FormProvider({ children }) {
   });
   const [selectedFieldId, setSelectedFieldId] = useState(null);
   const [currentStep, setCurrentStep] = useState(0); 
+
+  // 👉 NEW: Submissions state
+  const [submissions, setSubmissions] = useState(() => {
+    const saved = localStorage.getItem('formSubmissions');
+    return saved ? JSON.parse(saved) : {};
+});
+
   
+  // Save fields to localStorage
   useEffect(() => {
     localStorage.setItem('formFields', JSON.stringify(fields));
   }, [fields]);
+
+  // Save submissions to localStorage
+  useEffect(() => {
+    localStorage.setItem('formSubmissions', JSON.stringify(submissions));
+  }, [submissions]);
+
+function submitForm(formId, data) {
+  const existing = JSON.parse(localStorage.getItem(`formSubmissions-${formId}`)) || [];
+  const updated = [...existing, data];
+  localStorage.setItem(`formSubmissions-${formId}`, JSON.stringify(updated));
+}
+
+//   function submitForm(formId, data) {
+//   setSubmissions((prev) => {
+//     const updated = {
+//       ...prev,
+//       [formId]: [...(prev[formId] || []), data],
+//     };
+//     localStorage.setItem('formSubmissions', JSON.stringify(updated));
+//     return updated;
+//   });
+// }
+
+
 
   function addFieldAt(type, index) {
     const newField = {
@@ -116,10 +147,31 @@ export function FormProvider({ children }) {
     setSelectedFieldId(null);
   }
 
+  // --- NEW: Save current form fields as a template in localStorage ---
+  function saveTemplateToLocal(templateName) {
+    if (!templateName) return;
+    localStorage.setItem(`formTemplate-${templateName}`, JSON.stringify(fields));
+  }
+
+  // --- NEW: Load template fields from localStorage or use predefined fields ---
+  function loadTemplateFromLocal(templateName = '', predefinedFields = null) {
+    if (predefinedFields) {
+      setFields(predefinedFields);
+    } else if (templateName) {
+      const saved = localStorage.getItem(`formTemplate-${templateName}`);
+      if (saved) {
+        setFields(JSON.parse(saved));
+      } else {
+        alert('Template not found');
+      }
+    }
+  }
+
   return (
     <FormContext.Provider
       value={{
         fields,
+        setFields,
         selectedFieldId,
         setSelectedFieldId,
         addFieldAt,
@@ -128,9 +180,13 @@ export function FormProvider({ children }) {
         updateField,
         updateFieldValue,
         validateFieldValue,
-        resetForm, // 👉 Also exposed in the context value
-        currentStep, // ⬅️ NEW
-        setCurrentStep // ⬅️ NEW
+        resetForm, // Existing
+        currentStep,
+        setCurrentStep,
+        saveTemplateToLocal,  // NEW
+        loadTemplateFromLocal, // NEW
+        submissions,    // ✅ Exposed to components
+        submitForm
       }}
     >
       {children}

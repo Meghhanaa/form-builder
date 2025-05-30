@@ -103,7 +103,7 @@ export default function FieldEditor() {
   }
 
   return (
-    <aside className="w-1/4 p-4 bg-gray-100 dark:bg-gray-700 h-screen overflow-auto">
+    <aside className="w-1/4 p-4 bg-gray-100 dark:bg-gray-700 h-screen overflow-auto text-white">
       <h2 className="text-xl font-semibold mb-4">Edit Field</h2>
 
       <div className="mb-3">

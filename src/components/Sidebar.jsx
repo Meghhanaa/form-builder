@@ -17,7 +17,7 @@ export default function Sidebar() {
   return (
     <aside className="w-1/4 p-4 bg-gray-100 dark:bg-gray-700 h-screen">
       <h2 className="font-bold mb-4 text-lg">Add Fields</h2>
-      <ul className="space-y-3">
+      <ul className="space-y-3 mb-6 text-white">
         {fieldTypes.map((type) => (
           <li
             key={type}
@@ -29,7 +29,7 @@ export default function Sidebar() {
           </li>
         ))}
       </ul>
-      <TemplateLoader/>
+      <TemplateLoader />
     </aside>
   );
 }
